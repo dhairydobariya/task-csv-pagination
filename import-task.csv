@@ -1,0 +1,6 @@
+taskname,description,status,category,dueDate,assignedTo
+Task 1,Description for Task 1,pending,Category A,2024-12-01T12:00:00Z,60c72b2f5f1b2c001c8d4567
+Task 1,Description for Task 2,complete,Category B,2024-11-15T12:00:00Z,60c72b2f5f1b2c001c8d4568
+Task 1,Description for Task 3,pending,Category C,2024-10-30T12:00:00Z,60c72b2f5f1b2c001c8d4569
+Task 1,Description for Task 4,pending,Category D,2024-11-25T12:00:00Z,60c72b2f5f1b2c001c8d4570
+Task 5,Description for Task 5,complete,Category E,2024-10-05T12:00:00Z,60c72b2f5f1b2c001c8d4571
