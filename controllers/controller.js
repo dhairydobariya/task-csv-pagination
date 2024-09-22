@@ -109,6 +109,7 @@ const addTaskForAdmin = async (req, res) => {
         });
 
         await task.save();
+        getIO().emit('new-task', task);
         res.status(201).json({ message: 'Task added successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
@@ -404,6 +405,26 @@ const getPaginatedTasks = async (req, res) => {
 
 
 
+const sendPushNotification = require('../utils/sendPushNotification'); // Adjust path if necessary
+
+const sendDueDateReminders = async () => {
+    const now = new Date();
+    const reminderTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+
+    try {
+        const tasks = await Task.find({ dueDate: { $gte: now, $lte: reminderTime } });
+
+        tasks.forEach(task => {
+            sendPushNotification(task.assignedTo, `Reminder: Task "${task.taskname}" is due soon!`);
+        });
+    } catch (error) {
+        console.error('Error fetching tasks for reminders:', error);
+    }
+};
+
+
+
+
 
 module.exports = {
     defaults,
@@ -423,5 +444,6 @@ module.exports = {
     deleteUser,
     exportTasksToCSV,
     importTasksFromCSV,
-    getPaginatedTasks
+    getPaginatedTasks,
+    sendDueDateReminders
 };
