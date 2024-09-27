@@ -3,6 +3,7 @@
 
 ### Node ###
 # Logs
+firebase-service-account.json
 .env
 logs
 *.log

@@ -18,6 +18,26 @@ const defaults = (req, res) => {
     res.send("It's the default route, please sign in");
 };
 
+const admin = require('../firebase');  // Import initialized Firebase Admin SDK
+
+// Function to send notification
+const sendPushNotification = async (token, task) => {
+    const message = {
+        notification: {
+            title: 'New Task Assigned',
+            body: `You have been assigned a new task: ${task.title}`,
+        },
+        token: token, // This token is the device token of the recipient
+    };
+
+    try {   
+        const response = await admin.messaging().send(message);
+        console.log('Successfully sent message:', response);
+    } catch (error) {
+        console.error('Error sending message:', error);
+    }
+};
+
 const register = async (req, res) => {
     const { name, password, roll } = req.body;
 
@@ -80,6 +100,7 @@ const addTaskForUser = async (req, res) => {
         });
 
         await task.save();
+        await sendPushNotification(deviceToken, task);
         res.status(201).json({ message: 'Task added successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
@@ -403,9 +424,6 @@ const getPaginatedTasks = async (req, res) => {
     }
 };
 
-
-
-const sendPushNotification = require('../utils/sendPushNotification'); // Adjust path if necessary
 
 const sendDueDateReminders = async () => {
     const now = new Date();

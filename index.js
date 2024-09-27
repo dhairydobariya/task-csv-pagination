@@ -12,6 +12,18 @@ const cors = require('cors');
 const cron = require('node-cron'); // Import node-cron
 require('dotenv').config();
 
+const admin = require('firebase-admin');
+const serviceAccount = require('./firebase-service-account.json');
+
+// Check if the Firebase app is already initialized
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+} else {
+  admin.app(); // If already initialized, use the existing app
+}
+
 const server = http.createServer(app);
 
 initSocket(server);
